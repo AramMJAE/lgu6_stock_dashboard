@@ -11,9 +11,15 @@ import os
 
 # 폰트 파일 경로 설정
 font_path = os.path.join('nanum-gothic', 'NanumGothic.ttf')
+
+#Streamlit 리눅스 가상환경 따름
+#기본값으로 한글폰트 없음
+#별도 설치 필요, apt-get install
 font_prop = fm.FontProperties(fname=font_path)
 
 # 운영체제에 따른 한글 폰트 설정
+#local  Test 할 때는 Windows
+#배포할 때는 Streamlit 내부 리눅스 가상환경으로 배포가 됨
 if platform.system() == 'Windows':
     plt.rcParams['font.family'] = 'Malgun Gothic'
 else:  # Linux or other systems
@@ -49,7 +55,7 @@ def load_tickers():
 
 # 사이드바 - 사용자 입력
 st.sidebar.header("주식 정보")
-st.title("대시보드코드 업데이트!!!!")
+st.sidebar.header("대시보드코드 업데이트!!!!")
 
 tickers = load_tickers()
 selected_company = st.sidebar.selectbox(
@@ -72,7 +78,7 @@ def load_data(ticker, start_date, end_date):
 
 try:
     df = load_data(ticker, start_date, end_date)
-    
+
     # 기본 주식 정보 표시
     st.subheader(f"{selected_company} ({ticker}) 주식 정보")
     col1, col2, col3 = st.columns(3)
@@ -90,7 +96,7 @@ try:
     with tab1:
         st.subheader("Matplotlib 차트")
         fig, ax = plt.subplots(figsize=(12, 6))
-        ax.plot(df.index, df['Close'], label='종가')
+        ax.plot(df.index, df['Close'], label='종가') #seaborn 문법 X/ Matplotlib 문법
         ax.set_title(f"{selected_company} ({ticker}) 주가")
         ax.set_xlabel("날짜")
         ax.set_ylabel("가격 ($)")
